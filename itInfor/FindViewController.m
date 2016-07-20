@@ -13,10 +13,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //设置状态栏背景色为黑色
-    self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+    //更改navigationBar前景色
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1.00];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    //设置顶部文字颜色
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont fontWithName:@"Helvetica-Bold" size:18]}];
     
     self.title = @"发现";
     // Do any additional setup after loading the view, typically from a nib.
