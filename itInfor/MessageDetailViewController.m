@@ -1,14 +1,15 @@
 //
-//  FindViewController.m
+//  MessageDetailViewController.m
 //  itInfor
 //
-//  Created by 钱超 on 16/7/19.
+//  Created by 钱超 on 16/7/22.
 //  Copyright © 2016年 钱超. All rights reserved.
 //
 #import "CommonDefines.h"
-#import "FindViewController.h"
+#import "MessageDetailViewController.h"
 
-@implementation FindViewController
+@implementation MessageDetailViewController
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -19,7 +20,11 @@
     //设置顶部文字颜色
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont fontWithName:@"Helvetica-Bold" size:18]}];
     
-    self.title = @"发现";
+    [self.view setBackgroundColor:[UIColor whiteColor]];
+    
+    self.title = @"详情页面";
+    
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 

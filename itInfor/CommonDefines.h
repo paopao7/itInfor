@@ -11,4 +11,7 @@
 
 #define Global_tintColor [UIColor colorWithRed:0 green:(190 / 255.0) blue:(12 / 255.0) alpha:1]
 
+//设置navigationbar的背景色
+#define Global_navigationbar_background_color [UIColor colorWithRed:0.20 green:0.20 blue:0.22 alpha:1.00];
+
 #endif /* CommonDefines_h */
