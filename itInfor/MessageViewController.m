@@ -8,6 +8,9 @@
 #import "CommonDefines.h"
 #import "MessageViewController.h"
 #import "MessageDetailViewController.h"
+#import "AFNetworking.h"
+#import "MBProgressHUD.h"
+#import "MBProgressHUD+NJ.h"
 
 @implementation MessageViewController
 
@@ -79,7 +82,7 @@
 //先要设Cell可编辑
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    return NO;
 }
 
 //定义编辑样式
@@ -95,6 +98,11 @@
     [tableView setEditing:NO animated:YES];
 }
 
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];// 取消选中
+//    //其他代码
+//}
 //以下方法可以不是必须要实现，添加如下方法可实现特定效果：
 
 //修改编辑按钮文字
@@ -127,9 +135,9 @@
     return 2;
 }
 
-- (instancetype)initWithStyle:(UITableViewCellStyle) reuseIdentifier:(NSString *)reuseIdentifier{
-    return UITableViewCellStyleDefault;
-}
+//- (instancetype)initWithStyle:(UITableViewCellStyle) reuseIdentifier:(NSString *)reuseIdentifier{
+//    return UITableViewCellStyleDefault;
+//}
 
 //创建单元格对象函数
 
@@ -146,56 +154,109 @@
     }
     
   
+    //提交url相关
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    NSDictionary *parameters = @{};
+    
+    [manager POST:@"http://api.itinfor.cn/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
+        
+        if(!data){
+            [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+            
+            return;
+        }else{
+            [MBProgressHUD showSuccess:@"恭喜,请求成功"];
+            
+//            NSDictionary *respond = [data objectForKey:@"respond"];
+            
+            NSArray *list_arr = [data objectForKey:@"respond"];
+            
+            
+             NSLog(@"title is %@",list_arr);
+            
+            
+            
+            for (NSDictionary *list_node in list_arr) {
+                
+                NSString *image = [list_node objectForKey:@"image"];
+                
+                NSString *title = [list_node objectForKey:@"title"];
+                
+                NSString *content = [list_node objectForKey:@"conetnt"];
+                
+                NSString *time = [list_node objectForKey:@"create_time"];
+                
+                
+//                NSLog(@"title is %@",title);
+                
+//                //头像
+//                UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
+//                
+//                head_image.image = [UIImage imageNamed:image];
+//                
+//                head_image.layer.cornerRadius = head_image.frame.size.width / 14;
+//                
+//                [cell.contentView addSubview:head_image];
+//                
+//                
+//                
+//                
+//                
+//                //标题
+//                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
+//                
+//                title_label.text = title;
+//                
+//                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
+//                
+//                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
+//                
+//                [cell.contentView addSubview:title_label];
+//                
+//                
+//                
+//                //内容
+//                UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
+//                
+//                detail_label.text = content;
+//                
+//                detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
+//                
+//                [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
+//                
+//                [cell.contentView addSubview:detail_label];
+//                
+//                
+//                
+//                //时间
+//                UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-60, 0, 55, 30)];
+//                
+//                time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
+//                
+//                [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
+//                
+//                time_label.text = time;
+//                
+//                [cell.contentView addSubview:time_label];
+                
+            }
+        }
+
+        
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
     
     
 //    NSString *str = [NSString stringWithFormat:@"第%ld组，第%ld行",indexPath.section,indexPath.row];
 //    NSLog(@"%@",str);
 
-    UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
-    
-    head_image.image = [UIImage imageNamed:@"add_friend_icon_offical"];
-    
-    head_image.layer.cornerRadius = head_image.frame.size.width / 14;
-    
-    [cell.contentView addSubview:head_image];
-    
-    
-    
-    
-    UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
-    
-    title_label.text = @"订阅号";
-    
-    [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
-    
-    title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
-    
-    [cell.contentView addSubview:title_label];
-    
-    
-    
-    UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
-    
-    detail_label.text = @"简笔笑话:芳芳，你这是得多想爱啊？";
-    
-    detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
-    
-    [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
-    
-    [cell.contentView addSubview:detail_label];
-    
-    
-    
-    
-    UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-60, 0, 55, 30)];
-    
-    time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
-    
-    [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
-    
-    time_label.text = @"下午 10:55";
-    
-    [cell.contentView addSubview:time_label];
+
     
     
     
@@ -203,7 +264,9 @@
 }
 
 //点击列表
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;{
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];// 取消选中
+    
     MessageDetailViewController *message_detail = [[MessageDetailViewController alloc] init];
     
     [self.navigationController pushViewController:message_detail animated:YES];
