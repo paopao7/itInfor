@@ -27,7 +27,7 @@
     
     //设置顶部文字颜色
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont fontWithName:@"Helvetica-Bold" size:18]}];
-
+    
     self.title = @"微信";
     
     _tableView= [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
@@ -59,13 +59,13 @@
     
     
     UISearchBar *searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 44)];
-
+    
     _searchBar = searchBar;
     
     _searchBar.showsCancelButton = YES;
     
     searchBar.placeholder = @"搜索";
-
+    
     _tableView.tableHeaderView = searchBar;
     
     searchDisplayController = [[UISearchDisplayController alloc] initWithSearchBar:searchBar contentsController:self];
@@ -77,6 +77,25 @@
     
     
     // Do any additional setup after loading the view, typically from a nib.
+    
+    
+    
+    UIRefreshControl *rc = [[UIRefreshControl alloc] init];
+    
+    _rc = rc;
+    
+    rc.attributedTitle = [[NSAttributedString alloc] initWithString:@"下拉刷新"];
+    
+    [rc addTarget:self action:@selector(refreshTableView) forControlEvents:UIControlEventValueChanged];
+    
+//    self.refreshControl = rc;
+    
+    [_tableView addSubview:rc];
+}
+
+- (void) refreshTableView{
+    // 结束刷新
+    [_rc endRefreshing];
 }
 
 //先要设Cell可编辑
@@ -127,13 +146,13 @@
 //P1:数据视图对象本身
 //P2:哪一组需要的行数
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 5;
+    return 10;
 }
 
 //设置数据视图的组数
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    return 2;
-}
+//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+//    return 2;
+//}
 
 //- (instancetype)initWithStyle:(UITableViewCellStyle) reuseIdentifier:(NSString *)reuseIdentifier{
 //    return UITableViewCellStyleDefault;
@@ -151,112 +170,123 @@
         //P1:单元格的样式
         //P2:单元格的复用标记
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellStr];
-    }
-    
-  
-    //提交url相关
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-    
-    NSDictionary *parameters = @{};
-    
-    [manager POST:@"http://api.itinfor.cn/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
         
-        if(!data){
-            [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+        //提交url相关
+        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+        
+        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+        
+        NSDictionary *parameters = @{};
+        
+        [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
             
-            return;
-        }else{
-            [MBProgressHUD showSuccess:@"恭喜,请求成功"];
-            
-//            NSDictionary *respond = [data objectForKey:@"respond"];
-            
-            NSArray *list_arr = [data objectForKey:@"respond"];
-            
-            
-             NSLog(@"title is %@",list_arr);
-            
-            
-            
-            for (NSDictionary *list_node in list_arr) {
+            if(!data){
+                [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+                
+                return;
+            }else{
+                [MBProgressHUD showSuccess:@"恭喜,请求成功"];
+                
+                //            NSDictionary *respond = [data objectForKey:@"respond"];
+                
+                NSArray *list_arr = [[data objectForKey:@"respond"]objectForKey:@"list"];
+                //NSArray *lists = data[@"respond"][@"list"];
+                
+                NSLog(@"title is %@",list_arr);
+                
+                NSDictionary *list_node = list_arr[indexPath.row];
+                
+                //                for (NSDictionary *list_node in list_arr) {
                 
                 NSString *image = [list_node objectForKey:@"image"];
                 
                 NSString *title = [list_node objectForKey:@"title"];
                 
-                NSString *content = [list_node objectForKey:@"conetnt"];
+                NSString *content = [list_node objectForKey:@"content"];
                 
                 NSString *time = [list_node objectForKey:@"create_time"];
                 
                 
-//                NSLog(@"title is %@",title);
+                NSLog(@"title is %@",title);
                 
-//                //头像
-//                UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
-//                
-//                head_image.image = [UIImage imageNamed:image];
-//                
-//                head_image.layer.cornerRadius = head_image.frame.size.width / 14;
-//                
-//                [cell.contentView addSubview:head_image];
-//                
-//                
-//                
-//                
-//                
-//                //标题
-//                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
-//                
-//                title_label.text = title;
-//                
-//                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
-//                
-//                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
-//                
-//                [cell.contentView addSubview:title_label];
-//                
-//                
-//                
-//                //内容
-//                UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
-//                
-//                detail_label.text = content;
-//                
-//                detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
-//                
-//                [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
-//                
-//                [cell.contentView addSubview:detail_label];
-//                
-//                
-//                
-//                //时间
-//                UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-60, 0, 55, 30)];
-//                
-//                time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
-//                
-//                [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
-//                
-//                time_label.text = time;
-//                
-//                [cell.contentView addSubview:time_label];
+                //头像
+                UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
+                NSURL *url = [NSURL URLWithString:image];
+                head_image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+                
+                head_image.layer.cornerRadius = head_image.frame.size.width / 14;
+                
+                [cell.contentView addSubview:head_image];
+                
+                
+                
+                
+                
+                //标题
+                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
+                
+                title_label.text = title;
+                
+                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
+                
+                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
+                
+                [cell.contentView addSubview:title_label];
+                
+                
+                
+                //内容
+                UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
+                
+                
+                //字符串截取
+                content = [content substringToIndex:17];
+                
+                //字符串拼接
+                content = [content stringByAppendingString:@"..."];
+                
+                detail_label.text = content;
+                
+                
+                detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
+                
+                [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
+                
+                [cell.contentView addSubview:detail_label];
+
+                
+                
+                //时间
+                UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-100, 0, 90, 30)];
+                
+                time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
+                
+                [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
+                
+                time_label.text = time;
+                
+                [cell.contentView addSubview:time_label];
                 
             }
-        }
-
+            //            }
+            
+            
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Error: %@", error);
+        }];
         
-        
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
-    }];
-
+    }
     
     
-//    NSString *str = [NSString stringWithFormat:@"第%ld组，第%ld行",indexPath.section,indexPath.row];
-//    NSLog(@"%@",str);
-
-
+    
+    
+    
+    
+    //    NSString *str = [NSString stringWithFormat:@"第%ld组，第%ld行",indexPath.section,indexPath.row];
+    //    NSLog(@"%@",str);
+    
+    
     
     
     

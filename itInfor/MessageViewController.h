@@ -16,6 +16,8 @@
     UITableView *_tableView;
     
     UISearchBar *_searchBar;
+    
+    UIRefreshControl *_rc;
 }
 
 
