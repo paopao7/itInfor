@@ -21,7 +21,16 @@
     UISearchBar *_searchBar;
     
     UIRefreshControl *_rc;
+    
+    
+    
+
 }
+@property (nonatomic,copy)UILabel *title_label;
+
+@property (strong,nonatomic)MessageModel  *model;
+
+- (void) setModel:(MessageModel *)model;
 
 
 @end

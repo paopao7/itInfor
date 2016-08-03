@@ -15,6 +15,8 @@
 
 @implementation MessageViewController
 
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -161,8 +163,6 @@
     
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
-    NSDictionary *parameters = @{};
-    
 //    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
 //        
 //        if(!data){
@@ -261,10 +261,30 @@
 
 //创建单元格对象函数
 
+-(void)setModel:(MessageModel *)model{
+    _model = model;
+    
+    NSLog(@"model_title is %@",model.title);
+    
+    self.title_label.text = [NSString stringWithFormat:@"%@",model.title];
+//    _nameAndNum.text = [NSString stringWithFormat:@"%@ %@",model.name,model.phoneNumber];
+//    _address.text = [NSString stringWithFormat:@"%@ %@",model.address,model.addressDetail];
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+   
+    
+    
     NSString *cellStr = @"cell";
     
     UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellStr];
+    
+//    @property (nonatomic,strong)MessageModel  *model;
+//    cell
+
+
     
     if(cell == nil){
         //创建一个单元格对象
@@ -273,11 +293,11 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellStr];
         
         //提交url相关
-        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-        
-        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-        
-        NSDictionary *parameters = @{};
+//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+//        
+//        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+//        
+//        NSDictionary *parameters = @{};
         
 //        [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
 //            
@@ -312,39 +332,39 @@
 //
 //        Model *model = self.dataArray[indexPath.row];
         
-        MessageModel *model = [[MessageModel alloc] init];
-        
-        NSLog(@"model is %@",model.title);
-        
-        NSString *image = model.title;
+//        MessageModel *model = [[MessageModel alloc] init];
+//        
+//        NSLog(@"model is %@",model.title);
+//        
+//        NSString *image = model.title;
         
                 //头像
-                UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
-                NSURL *url = [NSURL URLWithString:image];
-                head_image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-                
-                head_image.layer.cornerRadius = head_image.frame.size.width / 14;
-                
-                [cell.contentView addSubview:head_image];
+//                UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
+////                NSURL *url = [NSURL URLWithString:image];
+//                head_image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
+//                
+//                head_image.layer.cornerRadius = head_image.frame.size.width / 14;
+//                
+//                [cell.contentView addSubview:head_image];
         
         //刷新表
-        [_tableView reloadData];
+//        [_tableView reloadData];
 //
 //                
 //                
 //                
 //                
 //                //标题
-//                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
-//                
+                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
+                
 //                title_label.text = title;
-//                
-//                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
-//                
-//                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
-//                
-//                [cell.contentView addSubview:title_label];
-//                
+        
+                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
+                
+                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
+                
+                [cell.contentView addSubview:title_label];
+//
 //                
 //                
 //                //内容
