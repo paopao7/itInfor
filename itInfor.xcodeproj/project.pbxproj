@@ -33,6 +33,7 @@
 		C90317741D411CBA0082D746 /* 22.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C903175C1D411CBA0082D746 /* 22.jpg */; };
 		C90317751D411CBA0082D746 /* 23.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C903175D1D411CBA0082D746 /* 23.jpg */; };
 		C90317781D412D470082D746 /* MessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C90317771D412D470082D746 /* MessageDetailViewController.m */; };
+		C92A1C421D5233310042B123 /* MessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = C92A1C411D5233310042B123 /* MessageModel.m */; };
 		C92B73E31D4FA047004C67CF /* MBProgressHUD+NJ.m in Sources */ = {isa = PBXBuildFile; fileRef = C92B73E21D4FA047004C67CF /* MBProgressHUD+NJ.m */; };
 		C9E3B0841D3E6F6A00F3242A /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E3B0831D3E6F6A00F3242A /* MessageViewController.m */; };
 		C9E3B08A1D3E702F00F3242A /* ContactViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C9E3B0891D3E702F00F3242A /* ContactViewController.m */; };
@@ -102,6 +103,8 @@
 		C903175D1D411CBA0082D746 /* 23.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 23.jpg; sourceTree = "<group>"; };
 		C90317761D412D470082D746 /* MessageDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageDetailViewController.h; sourceTree = "<group>"; };
 		C90317771D412D470082D746 /* MessageDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageDetailViewController.m; sourceTree = "<group>"; };
+		C92A1C401D5233310042B123 /* MessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageModel.h; sourceTree = "<group>"; };
+		C92A1C411D5233310042B123 /* MessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageModel.m; sourceTree = "<group>"; };
 		C92B73E11D4FA047004C67CF /* MBProgressHUD+NJ.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MBProgressHUD+NJ.h"; sourceTree = "<group>"; };
 		C92B73E21D4FA047004C67CF /* MBProgressHUD+NJ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MBProgressHUD+NJ.m"; sourceTree = "<group>"; };
 		C93D58A51D3E977100A2140B /* CommonDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommonDefines.h; sourceTree = "<group>"; };
@@ -181,6 +184,33 @@
 				D2E82B8A07E8B9F54CE42172 /* Pods-itInfor.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		C92A1C3A1D52325C0042B123 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C92A1C401D5233310042B123 /* MessageModel.h */,
+				C92A1C411D5233310042B123 /* MessageModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		C92A1C3B1D5232660042B123 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C9E3B0821D3E6F6A00F3242A /* MessageViewController.h */,
+				C9E3B0831D3E6F6A00F3242A /* MessageViewController.m */,
+				C90317761D412D470082D746 /* MessageDetailViewController.h */,
+				C90317771D412D470082D746 /* MessageDetailViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		C92A1C3C1D52326F0042B123 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 		C93D58A41D3E975000A2140B /* Common */ = {
@@ -305,10 +335,9 @@
 		C9F1583A1D37FB4200888901 /* Message */ = {
 			isa = PBXGroup;
 			children = (
-				C9E3B0821D3E6F6A00F3242A /* MessageViewController.h */,
-				C9E3B0831D3E6F6A00F3242A /* MessageViewController.m */,
-				C90317761D412D470082D746 /* MessageDetailViewController.h */,
-				C90317771D412D470082D746 /* MessageDetailViewController.m */,
+				C92A1C3C1D52326F0042B123 /* View */,
+				C92A1C3B1D5232660042B123 /* Controller */,
+				C92A1C3A1D52325C0042B123 /* Model */,
 			);
 			name = Message;
 			sourceTree = "<group>";
@@ -563,6 +592,7 @@
 				C9E3B08D1D3E703F00F3242A /* FindViewController.m in Sources */,
 				C9E3B0841D3E6F6A00F3242A /* MessageViewController.m in Sources */,
 				C9F158061D37F87D00888901 /* main.m in Sources */,
+				C92A1C421D5233310042B123 /* MessageModel.m in Sources */,
 				C92B73E31D4FA047004C67CF /* MBProgressHUD+NJ.m in Sources */,
 				C90317781D412D470082D746 /* MessageDetailViewController.m in Sources */,
 			);

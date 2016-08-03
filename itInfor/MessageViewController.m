@@ -11,11 +11,72 @@
 #import "AFNetworking.h"
 #import "MBProgressHUD.h"
 #import "MBProgressHUD+NJ.h"
+#import "MessageModel.h"
 
 @implementation MessageViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //网络请求
+//    [self internatRequest];
+    
+    //提交url相关
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    NSDictionary *parameters = @{};
+    
+    //    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
+    //
+    //        if(!data){
+    //            [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+    //
+    //            return;
+    //        }else{
+    //            [MBProgressHUD showSuccess:@"恭喜,请求成功"];
+    //        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    //            NSLog(@"Error: %@", error);
+    //        }];
+    
+    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:nil success:^(AFHTTPRequestOperation *operation,id data){
+        
+        //        NSDictionary *dic = (NSDictionary *)data;
+        
+        
+        
+        NSArray *message_list = data[@"respond"][@"list"];
+        
+        //        NSLog(@"message = %@",message_list);
+        
+        for(NSMutableDictionary *message in message_list){
+//            MessageModel  *MessageModels = [MessageModel appWithDict:message];
+            MessageModel *messM = [[MessageModel alloc] init];
+            
+            NSLog(@"message title is %@",message[@"title"]);
+            
+            messM.title = message[@"title"];
+            
+//            [weakSelf.dataArr addObject:productModel];
+            
+            
+//            MessageModel *MessageModel = [[MessageModel alloc] init];
+            
+//            MessageModel.title = message[@"title"];
+//            MessageModel.image = message[@"image"];
+        }
+        
+//        MessageModel *messM = [[MessageModel alloc] init];
+//        
+//        NSLog(@"messM is %@",messM.title);
+        
+    }failure:^(AFHTTPRequestOperation *operation,NSError *error){
+        NSLog(@"Error: %@", error);
+    }];
+    
+    
+    
     
     UISearchDisplayController *searchDisplayController;
     
@@ -91,6 +152,46 @@
 //    self.refreshControl = rc;
     
     [_tableView addSubview:rc];
+}
+
+//网络请求
+- (void) internatRequest{
+    //提交url相关
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    NSDictionary *parameters = @{};
+    
+//    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
+//        
+//        if(!data){
+//            [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+//            
+//            return;
+//        }else{
+//            [MBProgressHUD showSuccess:@"恭喜,请求成功"];
+//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//            NSLog(@"Error: %@", error);
+//        }];
+    
+    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:nil success:^(AFHTTPRequestOperation *operation,id data){
+        
+//        NSDictionary *dic = (NSDictionary *)data;
+        
+        
+        
+        NSArray *message_list = data[@"respond"][@"list"];
+        
+//        NSLog(@"message = %@",message_list);
+        
+        for(NSMutableDictionary *message in message_list){
+            MessageModel *MessageModel = [MessageModel initWithDict:message];
+        }
+        
+    }failure:^(AFHTTPRequestOperation *operation,NSError *error){
+        NSLog(@"Error: %@", error);
+    }];
 }
 
 - (void) refreshTableView{
@@ -178,37 +279,45 @@
         
         NSDictionary *parameters = @{};
         
-        [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
-            
-            if(!data){
-                [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
-                
-                return;
-            }else{
-                [MBProgressHUD showSuccess:@"恭喜,请求成功"];
-                
-                //            NSDictionary *respond = [data objectForKey:@"respond"];
-                
-                NSArray *list_arr = [[data objectForKey:@"respond"]objectForKey:@"list"];
-                //NSArray *lists = data[@"respond"][@"list"];
-                
-                NSLog(@"title is %@",list_arr);
-                
-                NSDictionary *list_node = list_arr[indexPath.row];
-                
-                //                for (NSDictionary *list_node in list_arr) {
-                
-                NSString *image = [list_node objectForKey:@"image"];
-                
-                NSString *title = [list_node objectForKey:@"title"];
-                
-                NSString *content = [list_node objectForKey:@"content"];
-                
-                NSString *time = [list_node objectForKey:@"create_time"];
-                
-                
-                NSLog(@"title is %@",title);
-                
+//        [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
+//            
+//            if(!data){
+//                [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+//                
+//                return;
+//            }else{
+//                [MBProgressHUD showSuccess:@"恭喜,请求成功"];
+//                
+//                //            NSDictionary *respond = [data objectForKey:@"respond"];
+//                
+//                NSArray *list_arr = [[data objectForKey:@"respond"]objectForKey:@"list"];
+//                //NSArray *lists = data[@"respond"][@"list"];
+//                
+//                NSLog(@"title is %@",list_arr);
+//                
+//                NSDictionary *list_node = list_arr[indexPath.row];
+//                
+//                //                for (NSDictionary *list_node in list_arr) {
+//                
+//                NSString *image = [list_node objectForKey:@"image"];
+//                
+//                NSString *title = [list_node objectForKey:@"title"];
+//                
+//                NSString *content = [list_node objectForKey:@"content"];
+//                
+//                NSString *time = [list_node objectForKey:@"create_time"];
+//                
+//                
+////                NSLog(@"title is %@",title);
+//
+//        Model *model = self.dataArray[indexPath.row];
+        
+        MessageModel *model = [[MessageModel alloc] init];
+        
+        NSLog(@"model is %@",model.title);
+        
+        NSString *image = model.title;
+        
                 //头像
                 UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
                 NSURL *url = [NSURL URLWithString:image];
@@ -217,64 +326,67 @@
                 head_image.layer.cornerRadius = head_image.frame.size.width / 14;
                 
                 [cell.contentView addSubview:head_image];
-                
-                
-                
-                
-                
-                //标题
-                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
-                
-                title_label.text = title;
-                
-                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
-                
-                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
-                
-                [cell.contentView addSubview:title_label];
-                
-                
-                
-                //内容
-                UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
-                
-                
-                //字符串截取
-                content = [content substringToIndex:17];
-                
-                //字符串拼接
-                content = [content stringByAppendingString:@"..."];
-                
-                detail_label.text = content;
-                
-                
-                detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
-                
-                [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
-                
-                [cell.contentView addSubview:detail_label];
-
-                
-                
-                //时间
-                UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-100, 0, 90, 30)];
-                
-                time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
-                
-                [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
-                
-                time_label.text = time;
-                
-                [cell.contentView addSubview:time_label];
-                
-            }
-            //            }
-            
-            
-            
-        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Error: %@", error);
-        }];
+        
+        //刷新表
+        [_tableView reloadData];
+//
+//                
+//                
+//                
+//                
+//                //标题
+//                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
+//                
+//                title_label.text = title;
+//                
+//                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
+//                
+//                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
+//                
+//                [cell.contentView addSubview:title_label];
+//                
+//                
+//                
+//                //内容
+//                UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
+//                
+//                
+//                //字符串截取
+//                content = [content substringToIndex:17];
+//                
+//                //字符串拼接
+//                content = [content stringByAppendingString:@"..."];
+//                
+//                detail_label.text = content;
+//                
+//                
+//                detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
+//                
+//                [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
+//                
+//                [cell.contentView addSubview:detail_label];
+//
+//                
+//                
+//                //时间
+//                UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-100, 0, 90, 30)];
+//                
+//                time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
+//                
+//                [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
+//                
+//                time_label.text = time;
+//                
+//                [cell.contentView addSubview:time_label];
+//                
+//            }
+//            //            }
+//            
+//            
+//            
+//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+//            NSLog(@"Error: %@", error);
+//        }];
         
     }
     
