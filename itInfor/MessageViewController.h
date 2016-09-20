@@ -26,11 +26,14 @@
     
 
 }
+
 @property (nonatomic,copy)UILabel *title_label;
 
 @property (strong,nonatomic)MessageModel  *model;
 
-- (void) setModel:(MessageModel *)model;
+@property (nonatomic, strong) NSMutableArray *dataSource;//数据源
+
+//- (void) setModel:(MessageModel *)model;
 
 
 @end

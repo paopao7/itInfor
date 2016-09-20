@@ -23,6 +23,7 @@
 //- (instancetype) initwithDic:(NSMutableDictionary *)dic;
 
 
+//@property(strong,nonatomic) MessageModel *msgModel;
 
 @property (nonatomic,copy) NSString *image;
 
