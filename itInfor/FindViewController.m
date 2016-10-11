@@ -7,6 +7,8 @@
 //
 #import "CommonDefines.h"
 #import "FindViewController.h"
+#import "ScanViewController.h"
+#import "SharkViewController.h"
 
 @implementation FindViewController
 
@@ -24,6 +26,7 @@
     _tableView = [[UITableView alloc] initWithFrame:self.view.bounds style:UITableViewStyleGrouped];
     
     _tableView.dataSource = self;
+    _tableView.delegate = self;
     
     [self.view addSubview:_tableView];
     // Do any additional setup after loading the view, typically from a nib.
@@ -95,4 +98,24 @@
     return cell;
 }
 
+
+//点击列表
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    //扫一扫
+    if(indexPath.section == 1 && indexPath.row == 0){
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];// 取消选中
+        
+         ScanViewController *scan_detail = [[ScanViewController alloc] init];
+        
+        [self.navigationController pushViewController:scan_detail animated:YES];
+    //摇一摇
+    }else if(indexPath.section == 1 && indexPath.row == 1){
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];// 取消选中
+    
+        SharkViewController *shark_detail = [[SharkViewController alloc] init];
+    
+        [self.navigationController pushViewController:shark_detail animated:YES];
+    }
+}
 @end

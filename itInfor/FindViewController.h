@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface FindViewController : UIViewController<UITableViewDataSource>{
+@interface FindViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>{
     UITableView *_tableView;
 }
 
