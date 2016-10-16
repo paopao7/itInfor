@@ -15,10 +15,12 @@
 @implementation ScanViewController
 
 - (void) function_init{
+    //初始化手电筒状态为关闭
+    _light_status = @"off";
+    
     //隐藏tabBar
     self.tabBarController.tabBar.hidden = YES;
-    
-    // Do any additional setup after loading the view.
+
     //更改navigationBar前景色
     self.navigationController.navigationBar.barTintColor = Global_navigationbar_background_color;
     
@@ -27,29 +29,26 @@
     //设置顶部文字颜色
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:[UIFont fontWithName:@"Helvetica-Bold" size:18]}];
     
-    [self.view setBackgroundColor:[UIColor whiteColor]];
-    
     self.title = @"扫一扫";
     
     
-    //打开手电筒
-    UIButton *_lightBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     
-    _lightBtn.frame = CGRectMake(110, 120, 100, 30);
+    //手电筒全屏的图片
+    _lightImageView = [[UIImageView alloc] initWithFrame:(CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height))];
     
+    _lightImageView.image = [UIImage imageNamed:@"light_off@2x.jpg"];
     
-    [_lightBtn setTitle:@"turnON" forState:UIControlStateNormal];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doTap:)];
     
-    //    [lightBtn setTintColor:[UIColor blackColor]];
+    _lightImageView.userInteractionEnabled = YES;
     
-    _lightBtn.font = [UIFont fontWithName:@"Helvetica" size:20];
+    [_lightImageView addGestureRecognizer:tap];
     
-    [_lightBtn addTarget:self action:@selector(openLight) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.view addSubview:_lightBtn];
+    [self.view addSubview:_lightImageView];
 }
 
 - (void)viewDidLoad {
+    //初始化界面
     [self function_init];
     
     [super viewDidLoad];
@@ -57,30 +56,38 @@
 }
 
 
-//打开手电筒
-- (void) openLight{
+- (void) doTap:(NSString *)str{
     device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     
-    NSString *status = _lightBtn.titleLabel.text;
-    NSLog(@"status=========>%@",_lightBtn.currentTitle);
-    if (![device hasTorch]) {//判断是否有闪光灯
-//        UIAlertView *alter = [[UIAlertView alloc]initWithTitle:@"提示" message:@"当前设备没有闪光灯，不能提供手电筒功能" delegate:nil cancelButtonTitle:@"Cancel" otherButtonTitles:nil, nil];
-//        [alter show];
+    
+    if([_light_status isEqualToString:@"off"]){
+        _lightImageView.image = [UIImage imageNamed:@"light_on@2x.jpg"];
+    
+        _light_status = @"on";
         
-    }else if([status isEqualToString:@"turnON"]){
+        //打开手电筒
         [device lockForConfiguration:nil];
         [device setTorchMode:AVCaptureTorchModeOn];
         [device unlockForConfiguration];
-        
-        [_lightBtn setTitle:@"turnOFF" forState:UIControlStateNormal];
     }else{
+        _lightImageView.image = [UIImage imageNamed:@"light_off@2x.jpg"];
+        
+        _light_status = @"off";
+
+        //关闭手电筒
         [device lockForConfiguration:nil];
         [device setTorchMode:AVCaptureTorchModeOff];
         [device unlockForConfiguration];
-         
-        [_lightBtn setTitle:@"turnON" forState:UIControlStateNormal];
     }
 }
+
+- (void) viewWillDisappear:(BOOL)animated{
+    //关闭手电筒
+    [device lockForConfiguration:nil];
+    [device setTorchMode:AVCaptureTorchModeOff];
+    [device unlockForConfiguration];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

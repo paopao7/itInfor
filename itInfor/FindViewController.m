@@ -118,4 +118,10 @@
         [self.navigationController pushViewController:shark_detail animated:YES];
     }
 }
+
+-(void) viewWillAppear:(BOOL)animated{
+    
+    //显示tabBar
+    self.tabBarController.tabBar.hidden = NO;
+}
 @end

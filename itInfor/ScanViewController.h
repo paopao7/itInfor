@@ -10,7 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 @interface ScanViewController : UIViewController{
 
+NSString *_light_status;
 UIButton *_lightBtn;
+UIImageView *_lightImageView;
 AVCaptureDevice *device;
     
 }
