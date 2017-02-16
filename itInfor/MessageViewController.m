@@ -15,20 +15,69 @@
 
 @implementation MessageViewController
 
-
+- (void)getListDataFromServer
+{
+    _dataSource = [[NSMutableArray alloc]initWithCapacity:0];
+    //        提交url相关
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    
+    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+    
+    NSDictionary *parameters = nil;
+    
+    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
+        
+        if(!data){
+            [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
+            
+            return;
+        }else{
+            [MBProgressHUD showSuccess:@"恭喜,请求成功"];
+            
+            NSDictionary *respond = [data objectForKey:@"respond"];
+            
+            NSArray *list_arr = respond[@"list"];
+            //NSArray *lists = data[@"respond"][@"list"];
+            
+            //                NSLog(@"title is %@",list_arr);
+            for (NSDictionary *list_node in list_arr) {
+                
+                MessageModel *model = [MessageModel appWithDict:list_node];
+                
+                [_dataSource addObject:model];
+            }
+            
+            //刷新表
+            [_tableView reloadData];
+            
+            
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     //网络请求
     [self internatRequest];
+<<<<<<< HEAD
     
     //提交url相关
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+=======
+    //获取列表数据
+    [self getListDataFromServer];
+//    提交url相关
+//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+>>>>>>> origin/master
     
-    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
+//    manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
     
-    NSDictionary *parameters = @{};
+//    NSDictionary *parameters = @{};
     
     //    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
     //
@@ -41,18 +90,18 @@
     //        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
     //            NSLog(@"Error: %@", error);
     //        }];
+//    
+//    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:nil success:^(AFHTTPRequestOperation *operation,id data){
+//        
+//        //        NSDictionary *dic = (NSDictionary *)data;
+//        
+//        
+//        
+//        NSArray *message_list = data[@"respond"][@"list"];
     
-    [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:nil success:^(AFHTTPRequestOperation *operation,id data){
-        
-        //        NSDictionary *dic = (NSDictionary *)data;
-        
-        
-        
-        NSArray *message_list = data[@"respond"][@"list"];
-        
         //        NSLog(@"message = %@",message_list);
         
-        for(NSMutableDictionary *message in message_list){
+        /*for(NSMutableDictionary *message in message_list){
 //            MessageModel  *MessageModels = [MessageModel appWithDict:message];
             MessageModel *messM = [[MessageModel alloc] init];
             
@@ -67,15 +116,19 @@
             
 //            MessageModel.title = message[@"title"];
 //            MessageModel.image = message[@"image"];
-        }
+        }*/
+        
+//        MessageModel *messM = [[MessageModel alloc] init];
+        
+//        messM = message_list;
         
 //        MessageModel *messM = [[MessageModel alloc] init];
 //        
 //        NSLog(@"messM is %@",messM.title);
-        
-    }failure:^(AFHTTPRequestOperation *operation,NSError *error){
-        NSLog(@"Error: %@", error);
-    }];
+//        
+//    }failure:^(AFHTTPRequestOperation *operation,NSError *error){
+//        NSLog(@"Error: %@", error);
+//    }];
     
     
     
@@ -186,9 +239,17 @@
 //        NSLog(@"message = %@",message_list);
         
         for(NSMutableDictionary *message in message_list){
+<<<<<<< HEAD
             MessageModel *messageModel = [MessageModel appWithDict:message];
             NSLog(@"model = %@",[messageModel description]);
+=======
+            MessageModel *messModel = [MessageModel appWithDict:message];
+            
+//            NSLog(@"message_list descrition %@",[message description]);
+            
+>>>>>>> origin/master
         }
+        
         
     }failure:^(AFHTTPRequestOperation *operation,NSError *error){
         NSLog(@"Error: %@", error);
@@ -203,20 +264,21 @@
 //先要设Cell可编辑
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return NO;
+    return YES;
 }
 
-//定义编辑样式
-- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView setEditing:YES animated:YES];
-    return UITableViewCellEditingStyleDelete;
-}
+////定义编辑样式
+//- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    [tableView setEditing:YES animated:YES];
+//    return UITableViewCellEditingStyleDelete;
+//}
 
 //进入编辑模式，按下出现的编辑按钮后
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView setEditing:NO animated:YES];
+//    [tableView setEditing:NO animated:YES];
+    tableView.editing = YES;
 }
 
 //- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -248,7 +310,7 @@
 //P1:数据视图对象本身
 //P2:哪一组需要的行数
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;
+    return _dataSource.count;
 }
 
 //设置数据视图的组数
@@ -260,18 +322,6 @@
 //    return UITableViewCellStyleDefault;
 //}
 
-//创建单元格对象函数
-
--(void)setModel:(MessageModel *)model{
-    _model = model;
-    
-    NSLog(@"model_title is %@",model.title);
-    
-    self.title_label.text = [NSString stringWithFormat:@"%@",model.title];
-//    _nameAndNum.text = [NSString stringWithFormat:@"%@ %@",model.name,model.phoneNumber];
-//    _address.text = [NSString stringWithFormat:@"%@ %@",model.address,model.addressDetail];
-}
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
@@ -281,147 +331,89 @@
     NSString *cellStr = @"cell";
     
     UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:cellStr];
-    
-//    @property (nonatomic,strong)MessageModel  *model;
-//    cell
 
-
+    //从数据源取出对应位置的model
+    MessageModel    *model = _dataSource[indexPath.row];
     
+    //cell重用
     if(cell == nil){
         //创建一个单元格对象
         //P1:单元格的样式
         //P2:单元格的复用标记
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellStr];
+
+    /**
+     *  创建UI控件
+     */
+        //头像
+        UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
         
-        //提交url相关
-//        AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//        
-//        manager.responseSerializer.acceptableContentTypes = [NSSet setWithObject:@"text/html"];
-//        
-//        NSDictionary *parameters = @{};
+        head_image.tag = 10;
         
-//        [manager POST:@"http://www.itinfor.cn/itInfor/index.php/Home/Index/get_message_list" parameters:parameters success:^(AFHTTPRequestOperation *operation, id data) {
-//            
-//            if(!data){
-//                [MBProgressHUD showError:@"网络繁忙，请稍后再试！"];
-//                
-//                return;
-//            }else{
-//                [MBProgressHUD showSuccess:@"恭喜,请求成功"];
-//                
-//                //            NSDictionary *respond = [data objectForKey:@"respond"];
-//                
-//                NSArray *list_arr = [[data objectForKey:@"respond"]objectForKey:@"list"];
-//                //NSArray *lists = data[@"respond"][@"list"];
-//                
-//                NSLog(@"title is %@",list_arr);
-//                
-//                NSDictionary *list_node = list_arr[indexPath.row];
-//                
-//                //                for (NSDictionary *list_node in list_arr) {
-//                
-//                NSString *image = [list_node objectForKey:@"image"];
-//                
-//                NSString *title = [list_node objectForKey:@"title"];
-//                
-//                NSString *content = [list_node objectForKey:@"content"];
-//                
-//                NSString *time = [list_node objectForKey:@"create_time"];
-//                
-//                
-////                NSLog(@"title is %@",title);
-//
-//        Model *model = self.dataArray[indexPath.row];
+        head_image.layer.cornerRadius = head_image.frame.size.width / 14;
         
-//        MessageModel *model = [[MessageModel alloc] init];
-//        
-//        NSLog(@"model is %@",model.title);
-//        
-//        NSString *image = model.title;
+        [cell.contentView addSubview:head_image];
+    //标题
+
+        UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
+    
+        title_label.tag = 20;
         
-                //头像
-//                UIImageView *head_image = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, 40, 40)];
-////                NSURL *url = [NSURL URLWithString:image];
-//                head_image.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
-//                
-//                head_image.layer.cornerRadius = head_image.frame.size.width / 14;
-//                
-//                [cell.contentView addSubview:head_image];
+        [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
+    
+        title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
+    
+        [cell.contentView addSubview:title_label];
+
+    //                //内容
+        UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
+    
+        detail_label.tag = 30;
         
-        //刷新表
-//        [_tableView reloadData];
-//
-//                
-//                
-//                
-//                
-//                //标题
-                UILabel *title_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 5, 220, 30)];
-                
-//                title_label.text = title;
-        
-                [title_label setTextColor:[UIColor colorWithRed:0.20 green:0.20 blue:0.20 alpha:1.00]];
-                
-                title_label.font = [UIFont fontWithName:@"Helvetica" size:16];
-                
-                [cell.contentView addSubview:title_label];
-//
-//                
-//                
-//                //内容
-//                UILabel *detail_label = [[UILabel alloc] initWithFrame:CGRectMake(60, 28, 300, 30)];
-//                
-//                
-//                //字符串截取
-//                content = [content substringToIndex:17];
-//                
-//                //字符串拼接
-//                content = [content stringByAppendingString:@"..."];
-//                
-//                detail_label.text = content;
-//                
-//                
-//                detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
-//                
-//                [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
-//                
-//                [cell.contentView addSubview:detail_label];
-//
-//                
-//                
-//                //时间
-//                UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-100, 0, 90, 30)];
-//                
-//                time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
-//                
-//                [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
-//                
-//                time_label.text = time;
-//                
-//                [cell.contentView addSubview:time_label];
-//                
-//            }
-//            //            }
-//            
-//            
-//            
-//        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            NSLog(@"Error: %@", error);
-//        }];
-        
+        detail_label.font = [UIFont fontWithName:@"Helvetica" size:13];
+    
+        [detail_label setTextColor:[UIColor colorWithRed:0.61 green:0.61 blue:0.61 alpha:1.00]];
+    
+        [cell.contentView addSubview:detail_label];
+    
+    
+    
+    //时间
+        UILabel *time_label = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-100, 0, 90, 30)];
+    
+        time_label.tag = 40;
+        time_label.font = [UIFont fontWithName:@"Helvetica" size:11];
+    
+        [time_label setTextColor:[UIColor colorWithRed:0.70 green:0.70 blue:0.70 alpha:1.00]];
+    
+        [cell.contentView addSubview:time_label];
+    
     }
     
+    //从重用的cell中找到控件
+    UIImageView *headImage = (UIImageView   *)[cell.contentView viewWithTag:10];
     
+    UILabel *titleLabel = (UILabel  *)[cell.contentView viewWithTag:20];
     
+    UILabel *detailLabel = (UILabel *)[cell.contentView viewWithTag:30];
     
+    UILabel *timeLabel = (UILabel   *)[cell.contentView viewWithTag:40];
     
+    //给控件设值
+    NSURL *url = [NSURL URLWithString:model.image];
+    headImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:url]];
     
-    //    NSString *str = [NSString stringWithFormat:@"第%ld组，第%ld行",indexPath.section,indexPath.row];
-    //    NSLog(@"%@",str);
+    titleLabel.text = model.title;
     
+    NSString    *content1 = nil;
+    NSString    *content2 = nil;
+    //字符串截取
+    content1 = [model.content substringToIndex:17];
+    //字符串拼接
+    content2 = [content1 stringByAppendingString:@"..."];
+    detailLabel.text = content2;
     
-    
-    
+    timeLabel.text = model.create_time;
     
     return cell;
 }
@@ -433,6 +425,27 @@
     MessageDetailViewController *message_detail = [[MessageDetailViewController alloc] init];
     
     [self.navigationController pushViewController:message_detail animated:YES];
+}
+
+
+#pragma mark <重写属性的set方法>
+//创建单元格对象函数
+/**
+ *  这种写法是错误的 ： setModel,其中 Model 为属性的对象名，首字母大写。
+ *  方法系统会自动生成
+ */
+- (void) setMessageModel:(MessageModel *)model{
+    NSLog(@"ssssss");
+    
+}
+/**
+ *  重写属性 model 的 set 方法
+ *
+ *  @param model 要传入的 model 模型
+ */
+- (void) setModel:(MessageModel *)model
+{
+    NSLog(@"这才是真正的sssssssssssss");
 }
 
 @end
