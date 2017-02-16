@@ -21,7 +21,7 @@
     [super viewDidLoad];
     
     //网络请求
-//    [self internatRequest];
+    [self internatRequest];
     
     //提交url相关
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -186,7 +186,8 @@
 //        NSLog(@"message = %@",message_list);
         
         for(NSMutableDictionary *message in message_list){
-            MessageModel *MessageModel = [MessageModel initWithDict:message];
+            MessageModel *messageModel = [MessageModel appWithDict:message];
+            NSLog(@"model = %@",[messageModel description]);
         }
         
     }failure:^(AFHTTPRequestOperation *operation,NSError *error){

@@ -35,16 +35,19 @@
         self.image=dict[@"image"];
         self.title=dict[@"title"];
         self.content=dict[@"content"];
-        self.title=dict[@"create_time"];
+        self.create_time=dict[@"create_time"];
     }
     return self;
 }
-+(instancetype) appWithDict:(NSDictionary *)dict{
++(instancetype)appWithDict:(NSDictionary *)dict{
     
     // 为何使用self，谁调用self方法 self就会指向谁！！
     return [[self alloc] initWithDict:dict];
     
 }
-
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"image = %@\ntitle = %@\n content = %@\n create_time = %@",self.image,self.title,self.content,self.create_time];
+}
 
 @end

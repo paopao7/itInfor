@@ -52,7 +52,7 @@
  */
 -(instancetype)initWithDict:(NSDictionary *)dict;
 
-+(instancetype) appWithDict:(NSDictionary *)dict;
++(instancetype)appWithDict:(NSDictionary *)dict;
 
 
 @end
